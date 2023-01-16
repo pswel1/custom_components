@@ -87,7 +87,7 @@ void Wiegand::loop() {
     for (auto *trigger : this->key_triggers_)
       trigger->trigger(key);
     if (key < 12) {
-      uint8 sendkey = KEYS[key];
+      uint8_t sendkey = KEYS[key];
       this->send_key_(sendkey);
     }
   } else if (count == 4) {
