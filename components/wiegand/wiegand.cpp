@@ -8,7 +8,6 @@ namespace wiegand {
 
 static const char *TAG = "wiegand.text_sensor";
 static const char *KEYS = "0123456789*#";
-rosslare_decoder_t = rosslare_decoder;
 
 void IRAM_ATTR HOT WiegandStore::d0_gpio_intr(WiegandStore *arg) {
   if (arg->d0.digital_read())
@@ -84,7 +83,7 @@ void Wiegand::loop() {
       trigger->trigger(tag);
   } else if (count == 6) {
       uint8_t key = 0; 
-      key = (uint8_t)rosslare_decoder.get_key_from_rosslare_bits(value);
+      key = get_key_from_rosslare_bits(value);
     for (auto *trigger : this->key_triggers_)
       trigger->trigger(key);
   } else if (count == 4) {
