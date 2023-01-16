@@ -86,6 +86,10 @@ void Wiegand::loop() {
       key = get_key_from_rosslare_bits(value);
     for (auto *trigger : this->key_triggers_)
       trigger->trigger(key);
+    if (key < 12) {
+      uint8 sendkey = KEYS[key];
+      this->send_key_(sendkey);
+    }
   } else if (count == 4) {
     for (auto *trigger : this->key_triggers_)
       trigger->trigger(value);
