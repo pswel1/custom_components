@@ -1,5 +1,5 @@
 // rosslare_decoder.h
-uint8_t get_key_from_rosslare_bits(uint64_t bits) {
+inline uint8_t get_key_from_rosslare_bits(uint64_t bits) {
     if (bits == 0b110100) {
         return 0;
     } else if (bits == 0b101111) {
