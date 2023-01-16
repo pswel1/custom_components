@@ -1,4 +1,5 @@
 #include "wiegand.h"
+#include "rosslare_decoder.h"
 #include "esphome/core/log.h"
 #include "esphome/core/helpers.h"
 
@@ -80,6 +81,12 @@ void Wiegand::loop() {
     }
     for (auto *trigger : this->tag_triggers_)
       trigger->trigger(tag);
+  } else if (count == 6) {
+      uint8_t key = 0; 
+      key = get_key_from_rosslare_bits(value);
+    for (auto *trigger : this->key_triggers_)
+      trigger->trigger(key);
+	}
   } else if (count == 4) {
     for (auto *trigger : this->key_triggers_)
       trigger->trigger(value);
