@@ -52,7 +52,7 @@ void KeyCollector::clear(bool progress_update) {
 }
 
 void KeyCollector::gateChoice(std::function<void(std::string, char)> _callback) {
-  this->gateChoice_callback_ = callback;
+  this->gateChoice_callback = callback;
 }
 
 void KeyCollector::key_pressed_(uint8_t key) {
