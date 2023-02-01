@@ -32,6 +32,8 @@ void KeyCollector::dump_config() {
     ESP_LOGCONFIG(TAG, "  end keys '%s'", this->end_keys_.c_str());
     ESP_LOGCONFIG(TAG, "  end key is required: %s", ONOFF(this->end_key_required_));
   }
+  if (this->gateChoice != nullptr)
+  ESP_LOGCONFIG(TAG, "  gate choice: %p", this->gateChoice);
   if (!this->allowed_keys_.empty())
     ESP_LOGCONFIG(TAG, "  allowed keys '%s'", this->allowed_keys_.c_str());
   if (this->timeout_ > 0)
