@@ -8,7 +8,7 @@ namespace key_collector {
 static const char *const TAG = "key_collector";
 
 KeyCollector::KeyCollector() : progress_trigger_(new Trigger<std::string, uint8_t>()), result_trigger_(new Trigger<std::string, uint8_t, uint8_t>()),
-  gateChoice(new Trigger<std::string, uint8_t>()) {}
+  gateChoice(new Trigger<char, uint8_t>()) {}
 
 void KeyCollector::loop() {
   if ((this->timeout_ == 0) || (this->result_.size() == 0) || (millis() - this->last_key_time_ < this->timeout_))
@@ -51,7 +51,7 @@ void KeyCollector::clear(bool progress_update) {
     this->progress_trigger_->trigger(this->result_, 0);
 }
 
-void KeyCollector::gateChoice(std::function<void(std::string, char)> _callback) {
+void KeyCollector::gateChoice(std::function<void(char)> _callback) {
   this->gateChoice_callback = callback;
 }
 
