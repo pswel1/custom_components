@@ -12,6 +12,7 @@ CONF_CLEAR_KEYS = 'clear_keys'
 CONF_ALLOWED_KEYS = 'allowed_keys'
 CONF_ON_PROGRESS = 'on_progress'
 CONF_ON_RESULT = 'on_result'
+CONF_ON_CHOICE = 'on_choice'
 
 AUTO_LOAD = ['key_provider']
 
@@ -33,6 +34,7 @@ CONFIG_SCHEMA = cv.All(cv.COMPONENT_SCHEMA.extend({
     cv.Optional(CONF_ALLOWED_KEYS): cv.string,
     cv.Optional(CONF_ON_PROGRESS): automation.validate_automation(single=True),
     cv.Optional(CONF_ON_RESULT): automation.validate_automation(single=True),
+    cv.Optional(CONF_ON_CHOICE): automation.validate_automation(single=True),
     cv.Optional(CONF_TIMEOUT): cv.positive_time_period_milliseconds,
 }), cv.has_at_least_one_key(CONF_END_KEYS, CONF_MAX_LENGTH))
 
@@ -66,6 +68,10 @@ async def to_code(config):
         await automation.build_automation(var.get_result_trigger(),
                                           [(cg.std_string, 'x'), (cg.uint8, 'start'), (cg.uint8, 'end')],
                                           config[CONF_ON_RESULT])
+    if CONF_ON_CHOICE in config:
+        await automation.build_automation(var.get_gate_choice(),
+                                          [(cg.char, 'x'), (cg.uint8, 'choice')],
+                                          config[CONF_ON_CHOICE)
     if CONF_TIMEOUT in config:
         cg.add(var.set_timeout(config[CONF_TIMEOUT]))
 
