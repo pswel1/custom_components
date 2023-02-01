@@ -7,7 +7,8 @@ namespace key_collector {
 
 static const char *const TAG = "key_collector";
 
-KeyCollector::KeyCollector() : progress_trigger_(new Trigger<std::string, uint8_t>()), result_trigger_(new Trigger<std::string, uint8_t, uint8_t>()) {}
+KeyCollector::KeyCollector() : progress_trigger_(new Trigger<std::string, uint8_t>()), result_trigger_(new Trigger<std::string, uint8_t, uint8_t>()),
+  gateChoice(new Trigger<std::string, uint8_t>()) {}
 
 void KeyCollector::loop() {
   if ((this->timeout_ == 0) || (this->result_.size() == 0) || (millis() - this->last_key_time_ < this->timeout_))
@@ -38,7 +39,7 @@ void KeyCollector::dump_config() {
 }
 
 void KeyCollector::set_provider(key_provider::KeyProvider *provider) {
-  provider->add_on_key_callback([this](uint8_t key) {
+  provider->add_on_key__callback([this](uint8_t key) {
     this->key_pressed_(key);
   });
 }
@@ -48,6 +49,10 @@ void KeyCollector::clear(bool progress_update) {
   this->start_key_ = 0;
   if (progress_update)
     this->progress_trigger_->trigger(this->result_, 0);
+}
+
+void KeyCollector::gateChoice(std::function<void(std::string, char)> _callback) {
+  this->gateChoice_callback_ = callback;
 }
 
 void KeyCollector::key_pressed_(uint8_t key) {
@@ -86,6 +91,20 @@ void KeyCollector::key_pressed_(uint8_t key) {
     this->result_trigger_->trigger(this->result_, this->start_key_, 0);
     this->clear(false);
   }
+  if ((this->max_length_ > 0) && (this->result_.size() == this->max_length_) && (this->end_key_required_)) {
+    unsigned long current_time = millis();
+    while ((millis() - current_time) < 3000) {
+      if (if (key == '*' || key == '#'){
+        this->gateChoice_callback(this->result_, key);
+        break;
+      }
+    }
+    if ((millis() - current_time) >= 3000) {
+        key == '#';
+        this->gateChoice_callback(this->result_, key);
+    }
+    this->result_trigger_->trigger(this->result_, this->start_key_, 0);
+    this->clear(false);
   this->progress_trigger_->trigger(this->result_, this->start_key_);
 }
 
