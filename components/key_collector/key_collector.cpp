@@ -94,7 +94,7 @@ void KeyCollector::key_pressed_(uint8_t key) {
   if ((this->max_length_ > 0) && (this->result_.size() == this->max_length_) && (this->end_key_required_)) {
     unsigned long current_time = millis();
     while ((millis() - current_time) < 3000) {
-      if (if (key == '*' || key == '#'){
+      if (key == '*' || key == '#'){
         this->gateChoice_callback(this->result_, key);
         break;
       }
