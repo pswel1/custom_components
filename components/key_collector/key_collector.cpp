@@ -1,9 +1,15 @@
 #include "key_collector.h"
 #include "esphome/core/hal.h"
 #include "esphome/core/log.h"
+#include <Arduino.h>
+
 
 namespace esphome {
 namespace key_collector {
+
+void setup() {
+  Serial.begin(115200);
+}
 
 static const char *const TAG = "key_collector";
 
@@ -31,7 +37,9 @@ void KeyCollector::dump_config() {
   if (!this->end_keys_.empty()) {
     ESP_LOGCONFIG(TAG, "  end keys '%s'", this->end_keys_.c_str());
     ESP_LOGCONFIG(TAG, "  end key is required: %s", ONOFF(this->end_key_required_));
+    //ESP_LOGCONFIG(TAG, "  gate choice: %p", this->gateChoice);
   }
+  //if (this->gateChoice != nullptr)
   if (!this->allowed_keys_.empty())
     ESP_LOGCONFIG(TAG, "  allowed keys '%s'", this->allowed_keys_.c_str());
   if (this->timeout_ > 0)
@@ -92,23 +100,25 @@ void KeyCollector::key_pressed_(uint8_t key) {
     this->clear(false);
   }
   if ((this->max_length_ > 0) && (this->result_.size() == this->max_length_) && (this->end_key_required_)) {
-    unsigned long current_time = millis();
     this->result_trigger_->trigger(this->result_, this->start_key_, 0);
+    this->clear(false);
+    Serial.println("Inside KeyCollector loop, before while");
+    unsigned long current_time = millis();
     while ((millis() - current_time) < 3000) {
-      if (key == '*' || key == '#'){
+      Serial.println("Inside while");
+      if (key == 11 || key == 22){
         this->gateChoice_callback(key);
         break;
       }
     }
     if ((millis() - current_time) >= 3000) {
-        key == '#';
+        Serial.println("Inside wait");
+        key == 22;
         this->gateChoice_callback(key);
     }
-    this->clear(false);
   }
   this->progress_trigger_->trigger(this->result_, this->start_key_);
 }
 
 }  // namespace key_collector
 }  // namespace esphome
-
