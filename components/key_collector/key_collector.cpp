@@ -47,7 +47,7 @@ void KeyCollector::dump_config() {
 }
 
 void KeyCollector::set_provider(key_provider::KeyProvider *provider) {
-  provider->add_on_key__callback([this](uint8_t key) {
+  provider->add_on_key_callback([this](uint8_t key) {
     this->key_pressed_(key);
   });
 }
@@ -60,7 +60,7 @@ void KeyCollector::clear(bool progress_update) {
 }
 
 void KeyCollector::gateChoice(std::function<void(std::string)> _callback) {
-  this->gateChoice_callback = callback;
+  this->gateChoice_callback = _callback;
 }
 
 void KeyCollector::key_pressed_(uint8_t key) {
