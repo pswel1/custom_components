@@ -70,7 +70,7 @@ async def to_code(config):
                                           config[CONF_ON_RESULT])
     if CONF_ON_CHOICE in config:
         await automation.build_automation(var.get_gate_choice(),
-                                          [(cg.char, 'x')],
+                                          [(cg.std_string, 'x')],
                                           config[CONF_ON_CHOICE])
     if CONF_TIMEOUT in config:
         cg.add(var.set_timeout(config[CONF_TIMEOUT]))
