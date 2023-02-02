@@ -93,18 +93,19 @@ void KeyCollector::key_pressed_(uint8_t key) {
   }
   if ((this->max_length_ > 0) && (this->result_.size() == this->max_length_) && (this->end_key_required_)) {
     unsigned long current_time = millis();
+    this->result_trigger_->trigger(this->result_, this->start_key_, 0);
     while ((millis() - current_time) < 3000) {
       if (key == '*' || key == '#'){
-        this->gateChoice_callback(this->result_, key);
+        this->gateChoice_callback(key);
         break;
       }
     }
     if ((millis() - current_time) >= 3000) {
         key == '#';
-        this->gateChoice_callback(this->result_, key);
+        this->gateChoice_callback(key);
     }
-    this->result_trigger_->trigger(this->result_, this->start_key_, 0);
     this->clear(false);
+  }
   this->progress_trigger_->trigger(this->result_, this->start_key_);
 }
 
