@@ -107,14 +107,14 @@ void KeyCollector::key_pressed_(uint8_t key) {
     while ((millis() - current_time) < 3000) {
       Serial.println("Inside while");
       if (key == 11 || key == 22){
-        this->gateChoice_callback(key);
+        this->gateChoice_callback_(key);
         break;
       }
     }
     if ((millis() - current_time) >= 3000) {
         Serial.println("Inside wait");
         key == 22;
-        this->gateChoice_callback(key);
+        this->gateChoice_callback_(key);
     }
   }
   this->progress_trigger_->trigger(this->result_, this->start_key_);
